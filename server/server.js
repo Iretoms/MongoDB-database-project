@@ -6,6 +6,7 @@ const {ObjectID} = require('mongodb')
 const {mongoose} = require('./db/mongoose')
 let {Todo} = require('./models/todo.js')
 let {User} = require('./models/user.js')
+let {authenticate} = require('./middleware/authenticate.js')
 
 let app = express()
 app.use(bodyParser.json())
@@ -97,14 +98,22 @@ app.post('/users',(req, res)=>{
 
 
 
-  user.save().then(()=>{
-    user.generateAuthToken()
-  }).then((token)=>{
+
+    user.generateAuthToken().then((token)=>{
     res.header('x-auth', token).send(user)
   }).catch((e)=>{
     res.status(400).send(e)
   })
 })
+
+
+
+
+
+app.get('/users/me',authenticate,(req, res)=>{
+  res.send(req.user)
+})
+
 
 
 app.listen(3000,()=>{
