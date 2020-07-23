@@ -90,6 +90,21 @@ app.patch('/todos/:id',(req, res)=>{
 
 })
 
+app.post('/users',(req, res)=>{
+  let body= _.pick(req.body,['email','password'])
+  let user = new User(body)
+
+
+
+
+  user.save().then(()=>{
+    user.generateAuthToken()
+  }).then((token)=>{
+    res.header('x-auth', token).send(user)
+  }).catch((e)=>{
+    res.status(400).send(e)
+  })
+})
 
 
 app.listen(3000,()=>{
@@ -97,3 +112,5 @@ app.listen(3000,()=>{
 })
 
 module.exports={app}
+
+//[5, 10, 15, 20].reduce((x, y)=> console.log(x,y))
