@@ -94,10 +94,7 @@ app.patch('/todos/:id',(req, res)=>{
 app.post('/users',(req, res)=>{
   let body= _.pick(req.body,['email','password'])
   let user = new User(body)
-
-
-
-
+     
 
     user.generateAuthToken().then((token)=>{
     res.header('x-auth', token).send(user)
@@ -108,12 +105,9 @@ app.post('/users',(req, res)=>{
 
 
 
-
-
 app.get('/users/me',authenticate,(req, res)=>{
   res.send(req.user)
 })
-
 
 
 app.listen(3000,()=>{
